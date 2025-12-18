@@ -1,11 +1,19 @@
 require("dotenv").config();
+const logger=require('./logger')
 const express = require("express");
-const app = express();
 
+const app = express();
 app.use(express.json());
 
+// middleware
+app.use(logger)
+app.use(function (req, res, next) {
+  console.log('Authenticating...');
+  next();
+})
+
 const courses = [
-  { id: 1, name: "course1" },
+  { id: 1, name: "course1" }, 
   { id: 2, name: "course2" },
   { id: 3, name: "course3" }
 ];
