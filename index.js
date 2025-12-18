@@ -4,6 +4,8 @@ const express = require("express");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //built in middleware to parse urlencoded bodies
+app.use(express.static("public")); //built in middleware to serve static files inside public folder-> now you can access readme.txt file in browser
 
 // middleware
 app.use(logger)

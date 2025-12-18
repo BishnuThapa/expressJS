@@ -1,0 +1,1 @@
+hello this is readme text inside public folder.
