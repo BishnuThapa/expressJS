@@ -1,8 +1,11 @@
 require("dotenv").config();
 const logger=require('./logger')
 const express = require("express");
+const helmet=require("helmet");
 
 const app = express();
+
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //built in middleware to parse urlencoded bodies
 app.use(express.static("public")); //built in middleware to serve static files inside public folder-> now you can access readme.txt file in browser
