@@ -1,16 +1,25 @@
 require("dotenv").config();
-const logger=require('./logger')
+const config=require('config')
+const logger=require('./middleware/logger')
+const courses = require('./routes/courses')
+const home=require('./routes/home')
 const express = require("express");
 const helmet=require("helmet");
 const app = express();
 
+
 console.log(`NODE ENV: ${process.env.NODE_ENV}`)
 console.log(`App ${app.get('env')}`)
+
 
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //built in middleware to parse urlencoded bodies
 app.use(express.static("public")); //built in middleware to serve static files inside public folder-> now you can access readme.txt file in browser
+
+
+//configurations
+console.log('Application Name: '+config.get('name'))
 
 // middleware
 app.use(logger)
@@ -19,53 +28,8 @@ app.use(function (req, res, next) {
   next();
 })
 
-const courses = [
-  { id: 1, name: "course1" }, 
-  { id: 2, name: "course2" },
-  { id: 3, name: "course3" }
-];
-
-
-app.get("/", (req, res) => {
-  res.send("Hello, Bishnu!");
-});
-
-app.get("/api/courses", (req, res) => {
-  res.send(courses);
-});
-
-app.post("/api/courses", (req, res) => {
-  const course = {
-    id: courses.length + 1,
-    name: req.body.name
-  }
-  courses.push(course);
-  res.send(course);
-});
-
-app.put('/api/courses/:id', (req, res) => {
-  const course = courses.find(c => c.id === parseInt(req.params.id))
-  if (!course) {
-    res.status(404).send('The course with the given ID was not found.');
-    return;
-  }
-  course.name = req.body.name;
-  res.send(course);
-});
-
-app.delete('/api/courses/:id', (req, res) => {
-  const course = courses.find(c => c.id === parseInt(req.params.id))
-  if (!course) return res.status(404).send('The course with the given ID was not found.');
-  const index = courses.indexOf(course);
-  courses.splice(index, 1);
-  res.send(course);
-});
-
-app.get('/api/courses/:id', (req, res) => {
-  const course = courses.find(c => c.id === parseInt(req.params.id))
-  if(!course) return res.status(404).send('The course with the given ID was not found.');
-  res.send(course);
-});
+app.use('/', home );
+app.use('/api/courses', courses);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
