@@ -2,8 +2,10 @@ require("dotenv").config();
 const logger=require('./logger')
 const express = require("express");
 const helmet=require("helmet");
-
 const app = express();
+
+console.log(`NODE ENV: ${process.env.NODE_ENV}`)
+console.log(`App ${app.get('env')}`)
 
 app.use(helmet());
 app.use(express.json());
