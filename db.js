@@ -21,10 +21,15 @@ const courseSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const Course = mongoose.model('Course', courseSchema); // automatically converts Course to courses collection
+async function createCourse() {
+    const course = new Course({
+        name: 'Angular Course',
+        author: 'Mosh',
+        tags: ['angular', 'frontend'],
+        ispublished: true
+    });
+    const result = await course.save();
+    console.log(result);
+}
 
-const course = new Course({
-    name: 'Angular Course',
-    author: 'Mosh',
-    tags: ['angular', 'frontend'],
-    ispublished: true
-})
+createCourse();
