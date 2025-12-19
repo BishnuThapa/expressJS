@@ -11,12 +11,20 @@ mongoose.connect('mongodb://localhost/playground')
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.error('Could not connect to MongoDB...', err));
 
-
-    //creating a schema for course collection
+//creating a schema for course collection
 const courseSchema = new mongoose.Schema({
     name: String,
     author: String,
     tags: [String],
     date: { type: Date, default: Date.now },
     ispublished: Boolean
-},{ timestamps: true })
+}, { timestamps: true })
+
+const Course = mongoose.model('Course', courseSchema); // automatically converts Course to courses collection
+
+const course = new Course({
+    name: 'Angular Course',
+    author: 'Mosh',
+    tags: ['angular', 'frontend'],
+    ispublished: true
+})
